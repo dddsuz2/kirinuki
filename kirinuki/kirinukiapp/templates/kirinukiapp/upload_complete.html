@@ -1,0 +1,8 @@
+<!-- upload_complete.html -->
+{% block content %}
+<h1>アップロード完了</h1>
+<ul>
+    <li>{{ file }}</li>
+</ul>
+<a href="{% url 'upload' %}"><button>戻る</button></a>
+{% endblock %}
