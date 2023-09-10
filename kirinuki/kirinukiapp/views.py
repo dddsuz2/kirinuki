@@ -1,31 +1,19 @@
+import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .models import FileUpload
 from .forms import FileUploadForm
-import os
 from django.views.generic.edit import FormView
+from .gen_gif import convert_movie_to_jpgs
 # Create your views here.
-
-UPLOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/media/'  # アップロードしたファイルを保存するディレクトリ
-FILE_NAME = ''
-
-# アップロードされたファイルのハンドル
-def handle_uploaded_file(f):
-    path = os.path.join(UPLOAD_DIR, f.name)
-    with open(path, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
 
 
 # ファイルアップロード
 def upload(request):
-    global FILE_NAME
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            upload_file = request.FILES['attach']
-            handle_uploaded_file(upload_file)
-            FILE_NAME = upload_file.name
+            form.save()
             return redirect('upload_complete')  # アップロード完了画面にリダイレクト
     else:
         form = FileUploadForm()
@@ -34,4 +22,8 @@ def upload(request):
 
 # ファイルアップロード完了
 def upload_complete(request):
-    return render(request, 'kirinukiapp/upload_complete.html' ,{'file': FILE_NAME})
+    uploaded_file = FileUpload.objects.first()
+    file_name = os.path.basename(uploaded_file.filename)
+    file_duration = int(uploaded_file.duration)
+    convert_movie_to_jpgs(uploaded_file.filename)
+    return render(request, 'kirinukiapp/upload_complete.html' ,{'file_name': file_name, 'file_duration': file_duration})

@@ -1,8 +1,22 @@
 <!-- upload_complete.html -->
 {% block content %}
-<h1>アップロード完了</h1>
-<ul>
-    <li>{{ file }}</li>
-</ul>
-<a href="{% url 'upload' %}"><button>戻る</button></a>
+<h2>アップロード完了</h1>
+<div>
+    <ul>
+        <li>ファイル名:{{ file_name }}</li>
+        <li>再生時間: {{ file_duration }} 秒</li> 
+    </ul>
+</div>
+<div>
+    <button type="button" id="generateGifButton">gif生成</button>
+</div>
+<br>
+<div id="gifGenerationResult">
+    <!-- GIF生成の結果をここに表示 -->
+</div>
+<br>
+<div>
+    <a href="{% url 'upload' %}"><button>戻る</button></a>
+</div>
 {% endblock %}
+
