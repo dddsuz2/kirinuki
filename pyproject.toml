@@ -11,6 +11,7 @@ django = "^4.2.5"
 django-cleanup = "^8.0.0"
 moviepy = "^1.0.3"
 opencv-python = "^4.8.0.76"
+apng = "^0.3.4"
 
 
 [build-system]
