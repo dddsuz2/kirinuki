@@ -20,3 +20,40 @@
 </div>
 {% endblock %}
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const generateGifButton = document.getElementById("generateGifButton");
+        const gifGenerationResult = document.getElementById("gifGenerationResult");
+
+        generateGifButton.addEventListener("click", function() {
+            // Fetch APIを使用してリクエストを送信
+            fetch("{% url 'generate_image' %}", {
+                method: "POST", // リクエストのタイプ
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json(); // JSONデータを解析
+            })
+            .then(data => {
+                // 成功時の処理: GIF生成の結果を表示
+                const file_area = document.getElementById('gifGenerationResult');
+                const img_element = document.createElement('img')
+                img_element.src = data.img_data;
+                file_area.append(img_element)
+                gifGenerationResult.innerHTML = data.img_data;
+            })
+            .catch(error => {
+                // エラー時の処理
+                console.error(error);
+            });
+        });
+    });
+</script>
